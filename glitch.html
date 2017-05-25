@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!-- saved from url=(0020)http://evilzone.org/ -->
+<html><!-- Hello :) --><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<title>Evilzone - Hacking and Security Network</title>
+
+		<style>
+
+			body {
+				height: 100%;
+				width: 100%;
+				margin: 0;
+				padding: 0;
+
+				background-color: #191919;
+
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.box {
+				color: #c8c8c8;
+
+				padding: 20px;
+				margin: 20px;
+				border: solid #404040 1px;
+				outline: solid #101010 1px;
+				background-color: #252525;
+
+				width: 610px;
+
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 50px;
+			}
+
+
+			.leCanvas {
+				border: solid #404040 1px;
+		 		outline: solid #101010 1px;
+		 		background-color: #202020;
+
+				padding: 10px;
+			}
+
+		</style>
+
+	</head>
+	<body>
+
+		<div class="box">
+			<canvas id="canvas" class="leCanvas" width="590" height="128"></canvas>
+		</div>
+
+
+		<script>
+
+			var canvas = document.getElementById('canvas')
+			  , context = canvas.getContext('2d')
+			  , img = new Image()
+			  , w
+			  , h
+			  , offset
+			  , glitchInterval;
+
+			img.onload = function() {
+			 	init();
+				window.onresize = init;
+			};
+			img.src = 'logo.png';//图片的大小与canvas相同
+
+			var init = function() {
+				clearInterval(glitchInterval);//清除定时器
+				canvas.width = w = img.width;//将图片的宽度赋值给w，并将画布的宽度设为图片的宽度
+				offset = w * .1;//设置偏移量为w*0.1
+				canvas.height = h = img.height;//将画布的高度设为图片的高度
+				glitchInterval = setInterval(function() {
+					clear();//每一帧清除前一帧
+					context.drawImage(img, 0, 0, img.width, img.height);//将图片全部剪切粘在画布上
+					setTimeout(glitchImg, randInt(250, 1000));//随机延时执行glitchImg
+				}, 500);
+			};
+
+			var clear = function() {
+				context.clearRect(0, 0, canvas.width, canvas.height);
+			};
+
+			var glitchImg = function() {
+				for (var i = 0; i < randInt(1, 13); i++) {
+					var x = Math.random() * w;
+					var y = Math.random() * h;
+					var spliceWidth = w - x;//
+					var spliceHeight = randInt(5, h / 3);
+					context.drawImage(canvas, 0, y, spliceWidth, spliceHeight, x, y, spliceWidth, spliceHeight);
+					//将从（0，y）处剪切的图像附在画布的（x，y）中
+					context.drawImage(canvas, spliceWidth, y, x, spliceHeight, 0, y, x, spliceHeight);
+					//将从（spliceWidth,y）处剪切的图像附在画布（0,y）处。伸缩宽度在（0,w）,伸缩高度在（5，h/3）
+				}
+			};
+
+			var randInt = function(a, b) {
+				return ~~(Math.random() * (b - a) + a);
+			};
+
+		</script>
+
+	
+
+</body></html>
