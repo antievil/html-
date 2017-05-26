@@ -76,7 +76,7 @@
 				glitchInterval = setInterval(function() {
 					clear();//每一帧清除前一帧
 					context.drawImage(img, 0, 0, img.width, img.height);//将图片全部剪切粘在画布上
-					setTimeout(glitchImg, randInt(250, 1000));//随机延时执行glitchImg
+					setTimeout(glitchImg, randInt(250, 1000));//随机延时执行产生glitch效果
 				}, 500);
 			};
 
@@ -85,12 +85,15 @@
 			};
 
 			var glitchImg = function() {
-				for (var i = 0; i < randInt(1, 13); i++) {
-					var x = Math.random() * w;
-					var y = Math.random() * h;
-					var spliceWidth = w - x;//
+				for (var i = 0; i < randInt(1, 13); i++) {//利用随机迭代次数产生随机glitch效果的数量
+					var x = Math.random() * w;//x-(0,w)
+					var y = Math.random() * h;//y-(0,h)
+					var spliceWidth = w - x;//（0，w）
 					var spliceHeight = randInt(5, h / 3);
+					//context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+					//sx,sy代表img被剪切的起点，swidth,sheight代表剪切的大小，x,y 代表放在画布中的位置，
 					context.drawImage(canvas, 0, y, spliceWidth, spliceHeight, x, y, spliceWidth, spliceHeight);
+					//其中有两个相同的y，相当于将剪切的图像平移x放在原图像上
 					//将从（0，y）处剪切的图像附在画布的（x，y）中
 					context.drawImage(canvas, spliceWidth, y, x, spliceHeight, 0, y, x, spliceHeight);
 					//将从（spliceWidth,y）处剪切的图像附在画布（0,y）处。伸缩宽度在（0,w）,伸缩高度在（5，h/3）
